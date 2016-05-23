@@ -36,26 +36,6 @@ public class LayerService {
 	private Set<StrandedPerson> strandedPersons = new HashSet<>();
 	private Set<OccupiedBuilding> occupiedBuildings = new HashSet<>();
 
-	{
-		Drone drone = new Drone();
-
-		drone.setPosition(new gpig.group2.maps.geographic.Point(100, 200));
-
-		drone.updateLocation(new gpig.group2.maps.geographic.Point(100, 200));
-		drone.updateLocation(new gpig.group2.maps.geographic.Point(100, 200));
-
-		CoordinateList waypoints = new CoordinateList();
-		waypoints.addCoordinate(new gpig.group2.maps.geographic.Point(100, 200));
-		waypoints.addCoordinate(new gpig.group2.maps.geographic.Point(100, 200));
-		drone.setWaypoints(waypoints);
-
-		strandedPersons.add(new StrandedPerson(new gpig.group2.maps.geographic.Point(100, 200), 2, DateTime.now()));
-
-		occupiedBuildings.add(new OccupiedBuilding(new gpig.group2.maps.geographic.Point(100, 200), 2, DateTime.now()));
-
-		drones.add(drone);
-	}
-
 	public Collection<Layer> getLayers() {
 
 		Collection<Layer> layers = new ArrayList<>(LayerId.values().length);
