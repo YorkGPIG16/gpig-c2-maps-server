@@ -2,7 +2,9 @@ package gpig.group2.mapsservices.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.geojson.Feature;
@@ -10,9 +12,7 @@ import org.geojson.FeatureCollection;
 import org.geojson.LineString;
 import org.geojson.LngLatAlt;
 import org.geojson.Point;
-import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import gpig.group2.maps.geographic.position.CoordinateList;
 import gpig.group2.maps.platform.Drone;
@@ -32,7 +32,7 @@ public class LayerService {
 	private static final String CURRENT_LOCATION = "current-location";
 	private static final String TYPE = "type";
 
-	private Set<Drone> drones = new HashSet<>();
+	private Map<Integer, Drone> drones = new HashMap<>();
 	private Set<StrandedPerson> strandedPersons = new HashSet<>();
 	private Set<OccupiedBuilding> occupiedBuildings = new HashSet<>();
 
@@ -67,14 +67,14 @@ public class LayerService {
 
 		for (OccupiedBuilding occupiedBuilding : occupiedBuildings) {
 			Feature spFeature = new Feature();
-			
+
 			Point spPoint = new Point();
 			spPoint.setCoordinates(convertPointToPoint(occupiedBuilding.getLocation()).getCoordinates());
 			spFeature.setGeometry(spPoint);
-			
+
 			spFeature.setProperty(ESTIMATED_OCCUPANCY, occupiedBuilding.getEstimatedOccupancy());
 			spFeature.setProperty(TIME_IDENTIFIED, occupiedBuilding.getTimeIdentified().toString());
-			
+
 			fc.add(spFeature);
 		}
 
@@ -84,20 +84,20 @@ public class LayerService {
 	private FeatureCollection getStrandedPersons() {
 
 		FeatureCollection fc = new FeatureCollection();
-		
+
 		for (StrandedPerson strandedPerson : strandedPersons) {
 			Feature spFeature = new Feature();
-			
+
 			Point spPoint = new Point();
 			spPoint.setCoordinates(convertPointToPoint(strandedPerson.getLocation()).getCoordinates());
 			spFeature.setGeometry(spPoint);
-			
+
 			spFeature.setProperty(ESTIMATED_NUMBER, strandedPerson.getEstimatedNumber());
 			spFeature.setProperty(TIME_IDENTIFIED, strandedPerson.getTimeIdentified().toString());
-			
+
 			fc.add(spFeature);
 		}
-		
+
 		return fc;
 	}
 
@@ -105,7 +105,7 @@ public class LayerService {
 
 		FeatureCollection fc = new FeatureCollection();
 
-		for (Drone drone : drones) {
+		for (Drone drone : drones.values()) {
 			Feature currLoc = getDroneLocationAsFeature(drone);
 			fc.add(currLoc);
 
@@ -171,4 +171,21 @@ public class LayerService {
 		return newPoint;
 	}
 
+	public void addOrUpdateDrone(Integer droneId, gpig.group2.maps.geographic.Point dronePosition,
+			CoordinateList droneWaypoints) {
+		
+		Drone drone = null;
+		if (drones.containsKey(droneId)) {
+			drone = drones.get(droneId);
+		}
+		else {
+			drone = new Drone();
+			drones.put(droneId, drone);
+			
+			drone.setId(droneId);
+		}
+		
+		drone.updateLocation(dronePosition);
+		drone.setWaypoints(droneWaypoints);
+	}
 }
