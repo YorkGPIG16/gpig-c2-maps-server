@@ -61,7 +61,7 @@ public class LayerService {
 		}
 	}
 
-	private FeatureCollection getBuildingOccupancy() {
+	private synchronized FeatureCollection getBuildingOccupancy() {
 
 		FeatureCollection fc = new FeatureCollection();
 
@@ -81,7 +81,7 @@ public class LayerService {
 		return fc;
 	}
 
-	private FeatureCollection getStrandedPersons() {
+	private synchronized FeatureCollection getStrandedPersons() {
 
 		FeatureCollection fc = new FeatureCollection();
 
@@ -101,7 +101,7 @@ public class LayerService {
 		return fc;
 	}
 
-	private FeatureCollection getDroneLocations() {
+	private synchronized FeatureCollection getDroneLocations() {
 
 		FeatureCollection fc = new FeatureCollection();
 
@@ -171,7 +171,7 @@ public class LayerService {
 		return newPoint;
 	}
 
-	public void addOrUpdateDrone(Integer droneId, gpig.group2.maps.geographic.Point dronePosition,
+	public synchronized void addOrUpdateDrone(Integer droneId, gpig.group2.maps.geographic.Point dronePosition,
 			CoordinateList droneWaypoints) {
 		
 		Drone drone = null;
