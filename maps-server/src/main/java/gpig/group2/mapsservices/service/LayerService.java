@@ -14,6 +14,7 @@ import org.geojson.LngLatAlt;
 import org.geojson.Point;
 import org.springframework.stereotype.Service;
 
+import gpig.group2.maps.geographic.position.BoundingBox;
 import gpig.group2.maps.geographic.position.CoordinateList;
 import gpig.group2.maps.platform.Drone;
 import gpig.group2.mapsservices.model.Layer;
@@ -33,8 +34,25 @@ public class LayerService {
 	private static final String TYPE = "type";
 
 	private Map<Integer, Drone> drones = new HashMap<>();
+	private Set<BoundingBox> deploymentAreas = new HashSet<>();
 	private Set<StrandedPerson> strandedPersons = new HashSet<>();
 	private Set<OccupiedBuilding> occupiedBuildings = new HashSet<>();
+	
+	// TEST DATA
+	{
+		BoundingBox boundingBox = new BoundingBox(new gpig.group2.maps.geographic.Point(100, 200),
+				new gpig.group2.maps.geographic.Point(200, 300));
+
+		deploymentAreas.add(boundingBox);
+	}
+	
+	public synchronized Collection<BoundingBox> getDeploymentAreas() {
+		return deploymentAreas;
+	}
+	
+	public synchronized void newDeploymentArea(BoundingBox deploymentArea) {
+		deploymentAreas.add(deploymentArea);
+	}
 
 	public Collection<Layer> getLayers() {
 

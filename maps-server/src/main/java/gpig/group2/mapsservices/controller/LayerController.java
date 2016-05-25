@@ -16,10 +16,10 @@ import gpig.group2.mapsservices.service.LayerService;
 
 @Controller
 @RequestMapping("/layers")
-public class MapsServicesController {
+public class LayerController {
 
 	@Autowired
-	LayerService layerService;
+	private LayerService layerService;
 
 	@RequestMapping(value = "/{layerIdInt}", produces = "application/json", method = RequestMethod.GET)
 	@ResponseBody
