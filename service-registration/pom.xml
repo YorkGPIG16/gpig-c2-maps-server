@@ -10,7 +10,7 @@
     <dependency>
       <groupId>co.j6mes.infra.srf</groupId>
       <artifactId>srf-proxy</artifactId>
-      <version>1.0.0.6</version>
+      <version>1.0.0.7</version>
       <scope>runtime</scope>
     </dependency>
   </dependencies>
