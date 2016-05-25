@@ -107,16 +107,23 @@ public class LayerService {
 
 		for (Drone drone : drones.values()) {
 			Feature currLoc = getDroneLocationAsFeature(drone);
-			fc.add(currLoc);
-
 			Feature history = getDroneHistoryAsFeature(drone);
-			fc.add(history);
-
 			Feature waypoints = getDroneWaypointsAsFeature(drone);
+			
+			addDroneIdToFeatures(drone, currLoc, history, waypoints);
+			
+			fc.add(currLoc);
+			fc.add(history);
 			fc.add(waypoints);
 		}
 
 		return fc;
+	}
+	
+	private void addDroneIdToFeatures(Drone drone, Feature... features) {
+		for (Feature feature : features) {
+			feature.setProperty("drone-id", drone.getId());
+		}
 	}
 
 	private Feature getDroneWaypointsAsFeature(Drone drone) {
@@ -138,7 +145,7 @@ public class LayerService {
 		Feature feature = new Feature();
 		LineString linestring = new LineString();
 		feature.setGeometry(linestring);
-
+		
 		for (gpig.group2.maps.geographic.Point point : coordList.getCoordinates()) {
 			Point gjPoint = convertPointToPoint(point);
 			linestring.add(gjPoint.getCoordinates());
@@ -159,8 +166,8 @@ public class LayerService {
 
 	private Point convertPointToPoint(gpig.group2.maps.geographic.Point point) {
 
-		float latitude = point.getLatitude();
-		float longitude = point.getLongitude();
+		float latitude = point.getLatitudeX();
+		float longitude = point.getLongitudeX();
 
 		Point newPoint = new Point();
 		LngLatAlt coordinates = new LngLatAlt();
@@ -186,6 +193,12 @@ public class LayerService {
 		}
 		
 		drone.updateLocation(dronePosition);
-		drone.setWaypoints(droneWaypoints);
+		
+		if (droneWaypoints == null) {
+			drone.setWaypoints(new CoordinateList());
+		}
+		else {
+			drone.setWaypoints(droneWaypoints);
+		}
 	}
 }
