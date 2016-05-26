@@ -71,10 +71,10 @@ public class DeploymentAreasController {
 		Point br = da.getBottomRightX();
 		Point tl = da.getTopLeftX();
 
-		float brLat = br.getLatitudeX(); // X
-		float brLon = br.getLongitudeX(); // Y
-		float tlLat = tl.getLatitudeX(); // X
-		float tlLon = tl.getLongitudeX(); // Y
+		double brLat = br.getLatitudeX(); // X
+		double brLon = br.getLongitudeX(); // Y
+		double tlLat = tl.getLatitudeX(); // X
+		double tlLon = tl.getLongitudeX(); // Y
 		
 		LngLatAlt tlLLA = new LngLatAlt(tlLat, tlLon);
 		LngLatAlt trLLA = new LngLatAlt(brLat, tlLon);
@@ -107,8 +107,8 @@ public class DeploymentAreasController {
 		List<LngLatAlt> coords = daPoly.getCoordinates().get(0);
 		LngLatAlt tlCoord = coords.get(TL_COORD_LOC);
 		LngLatAlt brCoord = coords.get(BR_COORD_LOC);
-		Point tlPoint = new Point((float) tlCoord.getLatitude(), (float) tlCoord.getLongitude());
-		Point brPoint = new Point((float) brCoord.getLatitude(), (float) brCoord.getLongitude());
+		Point tlPoint = new Point((double) tlCoord.getLatitude(), (double) tlCoord.getLongitude());
+		Point brPoint = new Point((double) brCoord.getLatitude(), (double) brCoord.getLongitude());
 		BoundingBox deploymentArea = new BoundingBox(tlPoint, brPoint);
 		return deploymentArea;
 	}

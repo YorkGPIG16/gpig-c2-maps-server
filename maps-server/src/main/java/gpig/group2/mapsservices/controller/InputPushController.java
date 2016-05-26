@@ -28,7 +28,7 @@ public class InputPushController {
 
 	@RequestMapping(value = "/strandedPerson", consumes = "application/xml", method = RequestMethod.POST)
 	@ResponseBody
-	public String pushDrone(@RequestBody StrandedPerson sp) {
+	public String pushStrandedPeron(@RequestBody StrandedPerson sp) {
 
 		gisService.addStrandedPerson(sp);
 		return "Accepted";

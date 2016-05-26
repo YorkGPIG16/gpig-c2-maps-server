@@ -114,7 +114,6 @@ public class GisService {
 			spPoint.setCoordinates(convertPointToPoint(strandedPerson.getLocation()).getCoordinates());
 			spFeature.setGeometry(spPoint);
 
-			spFeature.setProperty(ESTIMATED_NUMBER, strandedPerson.getEstimatedNumber());
 			spFeature.setProperty(TIME_IDENTIFIED, strandedPerson.getTimeIdentified().toString());
 
 			fc.add(spFeature);
@@ -188,8 +187,8 @@ public class GisService {
 
 	private Point convertPointToPoint(gpig.group2.maps.geographic.Point point) {
 
-		float latitude = point.getLatitudeX();
-		float longitude = point.getLongitudeX();
+		double latitude = point.getLatitudeX();
+		double longitude = point.getLongitudeX();
 
 		Point newPoint = new Point();
 		LngLatAlt coordinates = new LngLatAlt();
