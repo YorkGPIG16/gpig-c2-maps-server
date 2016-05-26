@@ -28,7 +28,6 @@ public class GisService {
 
 	private static final String ESTIMATED_OCCUPANCY = "estimated-occupancy";
 	private static final String TIME_IDENTIFIED = "time-identified";
-	private static final String ESTIMATED_NUMBER = "estimated-number";
 	private static final String WAYPOINTS = "waypoints";
 	private static final String HISTORY = "history";
 	private static final String CURRENT_LOCATION = "current-location";
@@ -40,20 +39,34 @@ public class GisService {
 	private Set<StrandedPerson> strandedPersons = new HashSet<>();
 	private Set<OccupiedBuilding> occupiedBuildings = new HashSet<>();
 	private Map<Integer, List<Feature>> floodRiskAreas = new HashMap<>();
-	
+
 	public synchronized void addStrandedPerson(StrandedPerson p) {
+
 		strandedPersons.add(p);
 	}
-	
+
 	public synchronized void addFloodRiskArea(int riskId, List<Feature> riskMap) {
+
 		floodRiskAreas.put(riskId, riskMap);
 	}
-	
+
+	public Set<StrandedPerson> getStrandedPersons() {
+
+		return strandedPersons;
+	}
+
+	public Set<OccupiedBuilding> getOccupiedBuildings() {
+
+		return occupiedBuildings;
+	}
+
 	public synchronized Map<Integer, BoundingBox> getDeploymentAreas() {
+
 		return deploymentAreas;
 	}
-	
+
 	public synchronized void newDeploymentArea(BoundingBox deploymentArea) {
+
 		deploymentAreas.put(deploymentAreaCntr, deploymentArea);
 		deploymentAreaCntr++;
 	}
@@ -77,7 +90,7 @@ public class GisService {
 			case DRONE_LOCATION:
 				return getDroneLocations();
 			case STRANDED_PERSONS:
-				return getStrandedPersons();
+				return getStrandedPersonsGeoJson();
 			default:
 				return null;
 		}
@@ -103,7 +116,7 @@ public class GisService {
 		return fc;
 	}
 
-	private synchronized FeatureCollection getStrandedPersons() {
+	private synchronized FeatureCollection getStrandedPersonsGeoJson() {
 
 		FeatureCollection fc = new FeatureCollection();
 
@@ -130,9 +143,9 @@ public class GisService {
 			Feature currLoc = getDroneLocationAsFeature(drone);
 			Feature history = getDroneHistoryAsFeature(drone);
 			Feature waypoints = getDroneWaypointsAsFeature(drone);
-			
+
 			addDroneIdToFeatures(drone, currLoc, history, waypoints);
-			
+
 			fc.add(currLoc);
 			fc.add(history);
 			fc.add(waypoints);
@@ -140,8 +153,9 @@ public class GisService {
 
 		return fc;
 	}
-	
+
 	private void addDroneIdToFeatures(Drone drone, Feature... features) {
+
 		for (Feature feature : features) {
 			feature.setProperty("drone-id", drone.getId());
 		}
@@ -166,7 +180,7 @@ public class GisService {
 		Feature feature = new Feature();
 		LineString linestring = new LineString();
 		feature.setGeometry(linestring);
-		
+
 		for (gpig.group2.maps.geographic.Point point : coordList.getCoordinates()) {
 			Point gjPoint = convertPointToPoint(point);
 			linestring.add(gjPoint.getCoordinates());
@@ -201,24 +215,22 @@ public class GisService {
 
 	public synchronized void addOrUpdateDrone(Integer droneId, gpig.group2.maps.geographic.Point dronePosition,
 			CoordinateList droneWaypoints) {
-		
+
 		Drone drone = null;
 		if (drones.containsKey(droneId)) {
 			drone = drones.get(droneId);
-		}
-		else {
+		} else {
 			drone = new Drone();
 			drones.put(droneId, drone);
-			
+
 			drone.setId(droneId);
 		}
-		
+
 		drone.updateLocation(dronePosition);
-		
+
 		if (droneWaypoints == null) {
 			drone.setWaypoints(new CoordinateList());
-		}
-		else {
+		} else {
 			drone.setWaypoints(droneWaypoints);
 		}
 	}
