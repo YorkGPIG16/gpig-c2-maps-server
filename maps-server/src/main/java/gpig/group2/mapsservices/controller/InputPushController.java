@@ -1,5 +1,6 @@
 package gpig.group2.mapsservices.controller;
 
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -8,7 +9,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import gpig.group2.mapsservices.service.GisService;
+import gpig.group2.model.sensor.OccupiedBuilding;
 import gpig.group2.model.sensor.StrandedPerson;
+import gpig.group2.models.drone.response.responsedatatype.BuildingOccupancyResponse;
 import gpig.group2.models.drone.status.DroneStatusMessage;
 
 @Controller
@@ -31,6 +34,15 @@ public class InputPushController {
 	public String pushStrandedPeron(@RequestBody StrandedPerson sp) {
 
 		gisService.addStrandedPerson(sp);
+		return "Accepted";
+	}
+	
+	@RequestMapping(value = "/buildingOccupancy", consumes = "application/xml", method = RequestMethod.POST)
+	@ResponseBody
+	public String pushStrandedPeron(@RequestBody BuildingOccupancyResponse bor) {
+
+		OccupiedBuilding ob = new OccupiedBuilding(bor.getOriginX(), bor.getEstimatedNumberOfPeopleX(), new DateTime(bor.getTimestampX()));
+		gisService.addOccupiedBuilding(ob);
 		return "Accepted";
 	}
 }

@@ -39,6 +39,10 @@ public class GisService {
 	private Set<StrandedPerson> strandedPersons = new HashSet<>();
 	private Set<OccupiedBuilding> occupiedBuildings = new HashSet<>();
 	private Map<Integer, List<Feature>> floodRiskAreas = new HashMap<>();
+	
+	public synchronized void addOccupiedBuilding(OccupiedBuilding ob) {
+		occupiedBuildings.add(ob);
+	}
 
 	public synchronized void addStrandedPerson(StrandedPerson p) {
 
