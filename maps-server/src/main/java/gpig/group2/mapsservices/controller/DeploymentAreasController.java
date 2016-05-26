@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.geojson.Feature;
+import org.geojson.FeatureCollection;
 import org.geojson.GeoJsonObject;
 import org.geojson.LngLatAlt;
 import org.geojson.Polygon;
@@ -28,6 +29,7 @@ public class DeploymentAreasController {
 
 	private static final int TL_COORD_LOC = 0;
 	private static final int BR_COORD_LOC = 2;
+	
 	@Autowired
 	private LayerService layerService;
 
@@ -48,6 +50,39 @@ public class DeploymentAreasController {
 		}
 
 		return rm;
+	}
+	
+	@RequestMapping(value = "/forMap", produces = "application/json", method = RequestMethod.GET)
+	@ResponseBody
+	public FeatureCollection getDeploymentAreasForMap() {
+
+		FeatureCollection fc = new FeatureCollection();
+		for (BoundingBox da : layerService.getDeploymentAreas().values()) {
+			Feature f = new Feature();
+			Polygon poly = boundingBoxToPolygon(da);
+			f.setGeometry(poly);
+			fc.add(f);
+		}
+		return fc;
+	}
+
+	private Polygon boundingBoxToPolygon(BoundingBox da) {
+
+		Point br = da.getBottomRightX();
+		Point tl = da.getTopLeftX();
+
+		float brLat = br.getLatitudeX(); // X
+		float brLon = br.getLongitudeX(); // Y
+		float tlLat = tl.getLatitudeX(); // X
+		float tlLon = tl.getLongitudeX(); // Y
+		
+		LngLatAlt tlLLA = new LngLatAlt(tlLat, tlLon);
+		LngLatAlt trLLA = new LngLatAlt(brLat, tlLon);
+		LngLatAlt brLLA = new LngLatAlt(brLat, brLon);
+		LngLatAlt blLLA = new LngLatAlt(tlLat, brLon);
+		
+		Polygon poly = new Polygon(tlLLA, trLLA, brLLA, blLLA, trLLA); // Have to repeat the last coord
+		return poly;
 	}
 
 	@RequestMapping(value = "/create", consumes = "application/json", method = RequestMethod.POST)
