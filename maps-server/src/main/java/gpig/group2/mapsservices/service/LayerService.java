@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -33,25 +34,24 @@ public class LayerService {
 	private static final String CURRENT_LOCATION = "current-location";
 	private static final String TYPE = "type";
 
+	private int deploymentAreaCntr = 0;
 	private Map<Integer, Drone> drones = new HashMap<>();
-	private Set<BoundingBox> deploymentAreas = new HashSet<>();
+	private Map<Integer, BoundingBox> deploymentAreas = new HashMap<>();
 	private Set<StrandedPerson> strandedPersons = new HashSet<>();
 	private Set<OccupiedBuilding> occupiedBuildings = new HashSet<>();
+	private Map<Integer, List<Feature>> floodRiskAreas = new HashMap<>();
 	
-	// TEST DATA
-	{
-		BoundingBox boundingBox = new BoundingBox(new gpig.group2.maps.geographic.Point(100, 200),
-				new gpig.group2.maps.geographic.Point(200, 300));
-
-		deploymentAreas.add(boundingBox);
+	public synchronized void addFloodRiskArea(int riskId, List<Feature> riskMap) {
+		floodRiskAreas.put(riskId, riskMap);
 	}
 	
-	public synchronized Collection<BoundingBox> getDeploymentAreas() {
+	public synchronized Map<Integer, BoundingBox> getDeploymentAreas() {
 		return deploymentAreas;
 	}
 	
 	public synchronized void newDeploymentArea(BoundingBox deploymentArea) {
-		deploymentAreas.add(deploymentArea);
+		deploymentAreas.put(deploymentAreaCntr, deploymentArea);
+		deploymentAreaCntr++;
 	}
 
 	public Collection<Layer> getLayers() {
