@@ -12,27 +12,27 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import gpig.group2.mapsservices.model.Layer;
 import gpig.group2.mapsservices.model.LayerId;
-import gpig.group2.mapsservices.service.LayerService;
+import gpig.group2.mapsservices.service.GisService;
 
 @Controller
 @RequestMapping("/layers")
 public class LayerController {
 
 	@Autowired
-	private LayerService layerService;
+	private GisService gisService;
 
 	@RequestMapping(value = "/{layerIdInt}", produces = "application/json", method = RequestMethod.GET)
 	@ResponseBody
 	public FeatureCollection getLayer(@PathVariable int layerIdInt) {
 
 		LayerId layerId = LayerId.getLayerIdFromIntId(layerIdInt);
-		return layerService.getLayer(layerId);
+		return gisService.getLayer(layerId);
 	}
 
 	@RequestMapping(value = "", produces = "application/json", method = RequestMethod.GET)
 	@ResponseBody
 	public Collection<Layer> getLayers() {
 
-		return layerService.getLayers();
+		return gisService.getLayers();
 	}
 }

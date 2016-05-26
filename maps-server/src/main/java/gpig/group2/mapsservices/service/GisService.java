@@ -24,7 +24,7 @@ import gpig.group2.model.sensor.OccupiedBuilding;
 import gpig.group2.model.sensor.StrandedPerson;
 
 @Service
-public class LayerService {
+public class GisService {
 
 	private static final String ESTIMATED_OCCUPANCY = "estimated-occupancy";
 	private static final String TIME_IDENTIFIED = "time-identified";
@@ -40,6 +40,10 @@ public class LayerService {
 	private Set<StrandedPerson> strandedPersons = new HashSet<>();
 	private Set<OccupiedBuilding> occupiedBuildings = new HashSet<>();
 	private Map<Integer, List<Feature>> floodRiskAreas = new HashMap<>();
+	
+	public synchronized void addStrandedPerson(StrandedPerson p) {
+		strandedPersons.add(p);
+	}
 	
 	public synchronized void addFloodRiskArea(int riskId, List<Feature> riskMap) {
 		floodRiskAreas.put(riskId, riskMap);

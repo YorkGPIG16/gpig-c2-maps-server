@@ -9,20 +9,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import gpig.group2.mapsservices.service.LayerService;
+import gpig.group2.mapsservices.service.GisService;
 
 @Controller
 @RequestMapping("/floodRisk")
 public class FloodRiskController {
 
 	@Autowired
-	private LayerService layerService;
+	private GisService gisService;
 
 	@RequestMapping(value = "/{riskId}", consumes = "application/json", method = RequestMethod.POST)
 	@ResponseBody
 	public String pushDrone(@PathVariable int riskId, @RequestBody FeatureCollection floodMap) {
 
-		layerService.addFloodRiskArea(riskId, floodMap.getFeatures());
+		gisService.addFloodRiskArea(riskId, floodMap.getFeatures());
 		return "Accepted";
 	}
 }

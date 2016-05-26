@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import gpig.group2.maps.geographic.Point;
 import gpig.group2.maps.geographic.position.BoundingBox;
-import gpig.group2.mapsservices.service.LayerService;
+import gpig.group2.mapsservices.service.GisService;
 import gpig.group2.models.drone.request.RequestMessage;
 import gpig.group2.models.drone.request.Task;
 import gpig.group2.models.drone.request.task.AerialSurveyTask;
@@ -31,7 +31,7 @@ public class DeploymentAreasController {
 	private static final int BR_COORD_LOC = 2;
 	
 	@Autowired
-	private LayerService layerService;
+	private GisService gisService;
 
 	@RequestMapping(produces = "application/xml", method = RequestMethod.GET)
 	@ResponseBody
@@ -41,8 +41,8 @@ public class DeploymentAreasController {
 		List<Task> tasks = new ArrayList<>();
 		rm.setTasks(tasks);
 
-		for (int daId : layerService.getDeploymentAreas().keySet()) {
-			BoundingBox da = layerService.getDeploymentAreas().get(daId);
+		for (int daId : gisService.getDeploymentAreas().keySet()) {
+			BoundingBox da = gisService.getDeploymentAreas().get(daId);
 			AerialSurveyTask ast = new AerialSurveyTask();
 			ast.setLocation(da);
 			ast.setId(daId);
@@ -57,7 +57,7 @@ public class DeploymentAreasController {
 	public FeatureCollection getDeploymentAreasForMap() {
 
 		FeatureCollection fc = new FeatureCollection();
-		for (BoundingBox da : layerService.getDeploymentAreas().values()) {
+		for (BoundingBox da : gisService.getDeploymentAreas().values()) {
 			Feature f = new Feature();
 			Polygon poly = boundingBoxToPolygon(da);
 			f.setGeometry(poly);
@@ -93,7 +93,7 @@ public class DeploymentAreasController {
 		if (daGjo instanceof Polygon) {
 			BoundingBox deploymentArea = getBoundingBoxFromPolygon(daGjo);
 
-			layerService.newDeploymentArea(deploymentArea);
+			gisService.newDeploymentArea(deploymentArea);
 
 			return "Accepted";
 		} else {
