@@ -34,7 +34,7 @@ public class GisService {
 	private static final String CURRENT_LOCATION = "current-location";
 	private static final String TYPE = "type";
 
-	private int deploymentAreaCntr = 0;
+	private int deploymentAreaCntr = 1;
 	private Map<Integer, Drone> drones = new HashMap<>();
 	private Map<Integer, BoundingBox> deploymentAreas = new HashMap<>();
 	private Set<StrandedPerson> strandedPersons = new HashSet<>();
