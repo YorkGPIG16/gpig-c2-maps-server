@@ -238,4 +238,9 @@ public class GisService {
 			drone.setWaypoints(droneWaypoints);
 		}
 	}
+
+	public void completeTask(int taskId) {
+		
+		deploymentAreas.remove(taskId);
+	}
 }
