@@ -115,9 +115,9 @@ public class DeploymentAreasController {
 
 	@RequestMapping(value = "/complete", produces = "application/xml", method = RequestMethod.POST)
 	@ResponseBody
-	public String completeDeploymentArea(Completed completed) {
+	public String completeDeploymentArea(@RequestBody Completed completed) {
 
-		completed.getTaskIdX();// DO this
+		gisService.completeTask(completed.getTaskIdX());
 		return "Accepted";
 	}
 }
