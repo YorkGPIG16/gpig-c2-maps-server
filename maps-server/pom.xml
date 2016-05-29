@@ -31,6 +31,10 @@
 			<id>gpig</id>
 			<url>http://m2.j6mes.co/</url>
 		</repository>
+		<repository>
+			<id>maven</id>
+			<url>https://repo.maven.apache.org/maven2/</url>
+		</repository>
 	</repositories>
 	<properties>
 		<slf4jVersion>1.7.6</slf4jVersion>
