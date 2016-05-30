@@ -37,7 +37,7 @@
 
 	<filter>
 		<filter-name>corsFilter</filter-name>
-		<filter-class>com.lingualearna.web.shared.filters.AddHeadersFilter</filter-class>
+		<filter-class>gpig.group2.mapsservices.filters.AddHeadersFilter</filter-class>
 		<init-param>
 			<param-name>Headers</param-name>
 			<param-value>Access-Control-Allow-Origin=*;Access-Control-Allow-Methods=GET, POST, OPTIONS;Access-Control-Allow-Headers=Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers</param-value>
