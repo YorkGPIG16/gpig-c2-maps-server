@@ -53,11 +53,13 @@ public class DeploymentAreasController {
 	public FeatureCollection getDeploymentAreasForMap() {
 
 		FeatureCollection fc = new FeatureCollection();
-		for (Task da : gisService.getDeploymentAreas().values()) {
+		for (int daId : gisService.getDeploymentAreas().keySet()) {
+			Task da =  gisService.getDeploymentAreas().get(daId);
 			if(da instanceof AerialSurveyTask) {
 				Feature f = new Feature();
 
 				f.setProperty("value",da.getPriorityX());
+				f.setProperty("id",daId);
 
 				Polygon poly = boundingBoxToPolygon(((AerialSurveyTask) da).getLocationX());
 				f.setGeometry(poly);
@@ -199,4 +201,13 @@ public class DeploymentAreasController {
 		gisService.completeTask(completed.getTaskIdX());
 		return "Accepted";
 	}
+
+	@RequestMapping(value = "/delete/{did}", method = RequestMethod.DELETE)
+	@ResponseBody
+	public String delete(@PathVariable Integer did) {
+
+		gisService.completeTask(did);
+		return "Deleted";
+	}
+
 }
