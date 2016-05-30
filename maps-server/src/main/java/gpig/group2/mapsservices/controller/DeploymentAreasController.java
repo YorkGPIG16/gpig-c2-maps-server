@@ -95,10 +95,12 @@ public class DeploymentAreasController {
 
 		GeoJsonObject daGjo = daFeature.getGeometry();
 
-		if(daFeature.getProperty("value") != null) {
-			prior = daFeature.getProperty("value");
-		}
+		if(daFeature.getProperties()!=null) {
+			if (daFeature.getProperty("value") != null) {
+				prior = daFeature.getProperty("value");
+			}
 
+		}
 
 		if (daGjo instanceof Polygon) {
 			BoundingBox deploymentArea = getBoundingBoxFromPolygon(daGjo);
