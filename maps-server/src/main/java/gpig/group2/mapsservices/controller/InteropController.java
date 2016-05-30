@@ -1,9 +1,14 @@
 package gpig.group2.mapsservices.controller;
 
 import java.util.HashSet;
+import java.util.List;
 
+import org.geojson.Feature;
+import org.geojson.FeatureCollection;
+import org.geojson.GeoJsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -24,6 +29,26 @@ public class InteropController {
 
 	@Autowired
 	private GisService gisService;
+
+	@RequestMapping(value = "waterEdge", produces = "application/json", method = RequestMethod.POST)
+	public String pushWaterEdgeData(@RequestBody GeoJsonObject gjo) {
+
+		FeatureCollection fc;
+		if (gjo instanceof FeatureCollection) {
+			fc = (FeatureCollection) gjo;
+		} else {
+			return "Not a FeatureCollection";
+		}
+		
+		List<Feature> features = fc.getFeatures();
+		if (features.size() < 1) {
+			return "No features";
+		}
+		
+		gisService.setWaterEdge(features.get(0));
+		
+		return "Accepted";
+	}
 
 	@RequestMapping(produces = "application/xml", method = RequestMethod.GET)
 	@ResponseBody
@@ -51,19 +76,20 @@ public class InteropController {
 		for (OccupiedBuilding ob : gisService.getOccupiedBuildings()) {
 			GISPosition gp = new GISPosition();
 			gp.position = latLonToPoint(ob.getLocation().getLatitudeX(), ob.getLocation().getLongitudeX());
-			
+
 			gp.timestamp = new Timestamp();
 			gp.timestamp.date = ob.getTimeIdentified().toDate();
-			
+
 			gpig.all.schema.datatypes.StrandedPerson gpigSp = new gpig.all.schema.datatypes.StrandedPerson();
 			gpigData.positions.add(gp);
 			gp.payload = gpigSp;
 		}
-		
+
 		return gpigData;
 	}
 
 	private Point latLonToPoint(Double lat, Double lon) {
+
 		Point point = new Point();
 		point.coord = new Coord();
 		point.coord.latitude = (float) (double) lat;

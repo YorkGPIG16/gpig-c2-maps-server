@@ -40,8 +40,22 @@ public class GisService {
 	private Set<StrandedPerson> strandedPersons = new HashSet<>();
 	private Set<OccupiedBuilding> occupiedBuildings = new HashSet<>();
 	private Map<Integer, List<Feature>> floodRiskAreas = new HashMap<>();
+	private Feature waterEdge;
 
 	private Integer lastStrandedPersonId = 0;
+
+	public FeatureCollection getWaterEdge() {
+
+		FeatureCollection waterEdge = new FeatureCollection();
+		waterEdge.add(this.waterEdge);
+		
+		return waterEdge;
+	}
+
+	public void setWaterEdge(Feature waterEdge) {
+
+		this.waterEdge = waterEdge;
+	}
 
 	public synchronized void addOccupiedBuilding(OccupiedBuilding ob) {
 
@@ -139,6 +153,8 @@ public class GisService {
 				return getDroneLocations();
 			case STRANDED_PERSONS:
 				return getStrandedPersonsGeoJson();
+			case WATER_EDGE:
+				return getWaterEdge();
 			default:
 				return null;
 		}
