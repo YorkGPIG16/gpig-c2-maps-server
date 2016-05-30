@@ -3,10 +3,7 @@ package gpig.group2.mapsservices.controller;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import gpig.group2.mapsservices.service.GisService;
 import gpig.group2.model.sensor.OccupiedBuilding;
@@ -31,12 +28,33 @@ public class InputPushController {
 
 	@RequestMapping(value = "/strandedPerson", consumes = "application/xml", method = RequestMethod.POST)
 	@ResponseBody
-	public String pushStrandedPeron(@RequestBody StrandedPerson sp) {
+	public String pushStrandedPerson(@RequestBody StrandedPerson sp) {
 
 		gisService.addStrandedPerson(sp);
 		return "Accepted";
 	}
-	
+
+	@RequestMapping(value = "/strandedPerson/{pid}", method = RequestMethod.DELETE)
+	@ResponseBody
+	public String pushStrandedPersonDelete(@PathVariable Integer pid) {
+
+		gisService.clearStrandedPerson(pid);
+		return "Accepted";
+
+	}
+
+
+	@RequestMapping(value = "/strandedPerson/{pid}/{tid}", consumes = "application/xml", method = RequestMethod.PUT)
+	@ResponseBody
+	public String pushStrandedPersonNewTask(@PathVariable Integer pid, @PathVariable Integer tid) {
+
+		gisService.setPersonTask(pid,tid);
+		return "Accepted";
+
+	}
+
+
+
 	@RequestMapping(value = "/buildingOccupancy", consumes = "application/xml", method = RequestMethod.POST)
 	@ResponseBody
 	public String pushStrandedPeron(@RequestBody BuildingOccupancyResponse bor) {

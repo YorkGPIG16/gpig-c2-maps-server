@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import gpig.group2.models.drone.request.Task;
 import org.geojson.Feature;
 import org.geojson.FeatureCollection;
 import org.geojson.LineString;
@@ -35,19 +36,57 @@ public class GisService {
 
 	private int deploymentAreaCntr = 1;
 	private Map<Integer, Drone> drones = new HashMap<>();
-	private Map<Integer, BoundingBox> deploymentAreas = new HashMap<>();
+	private Map<Integer, Task> deploymentAreas = new HashMap<>();
 	private Set<StrandedPerson> strandedPersons = new HashSet<>();
 	private Set<OccupiedBuilding> occupiedBuildings = new HashSet<>();
 	private Map<Integer, List<Feature>> floodRiskAreas = new HashMap<>();
-	
+
+
+
+	private Integer lastStrandedPersonId = 0;
+	private Integer lastBuildingOccupancyId = 0;
+
+
 	public synchronized void addOccupiedBuilding(OccupiedBuilding ob) {
 		occupiedBuildings.add(ob);
 	}
 
 	public synchronized void addStrandedPerson(StrandedPerson p) {
+		lastStrandedPersonId+=1;
+		p.setId(lastStrandedPersonId);
 
 		strandedPersons.add(p);
 	}
+
+
+	public synchronized void clearStrandedPerson(Integer id) {
+
+		StrandedPerson found = null;
+		for(StrandedPerson person : strandedPersons) {
+			if(person.getId() == id) {
+				found = person;
+			}
+		}
+
+		if(found != null) {
+			strandedPersons.remove(found);
+		}
+
+	}
+
+	public void setPersonTask(Integer pid, Integer tid) {
+		StrandedPerson found = null;
+		for(StrandedPerson person : strandedPersons) {
+			if(person.getId() == pid) {
+				found = person;
+			}
+		}
+
+		if(found != null) {
+			found.setOwningTask(tid);
+		}
+	}
+
 
 	public synchronized void addFloodRiskArea(int riskId, List<Feature> riskMap) {
 
@@ -64,16 +103,25 @@ public class GisService {
 		return occupiedBuildings;
 	}
 
-	public synchronized Map<Integer, BoundingBox> getDeploymentAreas() {
+	public synchronized Map<Integer, Task> getDeploymentAreas() {
 
 		return deploymentAreas;
 	}
 
-	public synchronized void newDeploymentArea(BoundingBox deploymentArea) {
+	public synchronized void newDeploymentArea(Task deploymentArea) {
 
 		deploymentAreas.put(deploymentAreaCntr, deploymentArea);
 		deploymentAreaCntr++;
 	}
+
+	public synchronized void newDeploymentAreaForPOI(Integer pid, Task deploymentArea) {
+
+		deploymentAreas.put(deploymentAreaCntr, deploymentArea);
+		setPersonTask(pid,deploymentAreaCntr);
+
+		deploymentAreaCntr++;
+	}
+
 
 	public Collection<Layer> getLayers() {
 
@@ -126,6 +174,8 @@ public class GisService {
 
 		for (StrandedPerson strandedPerson : strandedPersons) {
 			Feature spFeature = new Feature();
+			spFeature.setProperty("task",strandedPerson.getOwningTask());
+			spFeature.setProperty("id",strandedPerson.getId());
 
 			Point spPoint = new Point();
 			spPoint.setCoordinates(convertPointToPoint(strandedPerson.getLocation()).getCoordinates());
@@ -243,4 +293,6 @@ public class GisService {
 		
 		deploymentAreas.remove(taskId);
 	}
+
+
 }
