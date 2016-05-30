@@ -40,12 +40,7 @@ public class InteropController {
 			return "Not a FeatureCollection";
 		}
 		
-		List<Feature> features = fc.getFeatures();
-		if (features.size() < 1) {
-			return "No features";
-		}
-		
-		gisService.setWaterEdge(features.get(0));
+		gisService.setWaterEdge(fc);
 		
 		return "Accepted";
 	}

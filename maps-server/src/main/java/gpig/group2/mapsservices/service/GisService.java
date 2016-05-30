@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import gpig.group2.models.drone.request.Task;
 import org.geojson.Feature;
 import org.geojson.FeatureCollection;
 import org.geojson.LineString;
@@ -16,13 +15,13 @@ import org.geojson.LngLatAlt;
 import org.geojson.Point;
 import org.springframework.stereotype.Service;
 
-import gpig.group2.maps.geographic.position.BoundingBox;
 import gpig.group2.maps.geographic.position.CoordinateList;
 import gpig.group2.maps.platform.Drone;
 import gpig.group2.mapsservices.model.Layer;
 import gpig.group2.mapsservices.model.LayerId;
 import gpig.group2.model.sensor.OccupiedBuilding;
 import gpig.group2.model.sensor.StrandedPerson;
+import gpig.group2.models.drone.request.Task;
 
 @Service
 public class GisService {
@@ -40,19 +39,20 @@ public class GisService {
 	private Set<StrandedPerson> strandedPersons = new HashSet<>();
 	private Set<OccupiedBuilding> occupiedBuildings = new HashSet<>();
 	private Map<Integer, List<Feature>> floodRiskAreas = new HashMap<>();
-	private Feature waterEdge;
+	private FeatureCollection waterEdge;
 
 	private Integer lastStrandedPersonId = 0;
 
 	public FeatureCollection getWaterEdge() {
 
-		FeatureCollection waterEdge = new FeatureCollection();
-		waterEdge.add(this.waterEdge);
-		
-		return waterEdge;
+		if (this.waterEdge == null) {
+			return new FeatureCollection();
+		} else {
+			return waterEdge;
+		}
 	}
 
-	public void setWaterEdge(Feature waterEdge) {
+	public void setWaterEdge(FeatureCollection waterEdge) {
 
 		this.waterEdge = waterEdge;
 	}
