@@ -41,50 +41,52 @@ public class GisService {
 	private Set<OccupiedBuilding> occupiedBuildings = new HashSet<>();
 	private Map<Integer, List<Feature>> floodRiskAreas = new HashMap<>();
 
+
+
 	private Integer lastStrandedPersonId = 0;
+	private Integer lastBuildingOccupancyId = 0;
+
 
 	public synchronized void addOccupiedBuilding(OccupiedBuilding ob) {
-
 		occupiedBuildings.add(ob);
 	}
 
-	public synchronized void addStrandedPerson(String baseUrl, StrandedPerson p) {
-
-		lastStrandedPersonId += 1;
+	public synchronized void addStrandedPerson(StrandedPerson p) {
+		lastStrandedPersonId+=1;
 		p.setId(lastStrandedPersonId);
-		p.setImageUrl(String.format(baseUrl + "imgs/%s", p.getImageUrl()));
 
 		strandedPersons.add(p);
 	}
 
+
 	public synchronized void clearStrandedPerson(Integer id) {
 
 		StrandedPerson found = null;
-		for (StrandedPerson person : strandedPersons) {
-			if (person.getId() == id) {
+		for(StrandedPerson person : strandedPersons) {
+			if(person.getId() == id) {
 				found = person;
 			}
 		}
 
-		if (found != null) {
+		if(found != null) {
 			strandedPersons.remove(found);
 		}
 
 	}
 
 	public void setPersonTask(Integer pid, Integer tid) {
-
 		StrandedPerson found = null;
-		for (StrandedPerson person : strandedPersons) {
-			if (person.getId() == pid) {
+		for(StrandedPerson person : strandedPersons) {
+			if(person.getId() == pid) {
 				found = person;
 			}
 		}
 
-		if (found != null) {
+		if(found != null) {
 			found.setOwningTask(tid);
 		}
 	}
+
 
 	public synchronized void addFloodRiskArea(int riskId, List<Feature> riskMap) {
 
@@ -115,10 +117,11 @@ public class GisService {
 	public synchronized void newDeploymentAreaForPOI(Integer pid, Task deploymentArea) {
 
 		deploymentAreas.put(deploymentAreaCntr, deploymentArea);
-		setPersonTask(pid, deploymentAreaCntr);
+		setPersonTask(pid,deploymentAreaCntr);
 
 		deploymentAreaCntr++;
 	}
+
 
 	public Collection<Layer> getLayers() {
 
@@ -171,8 +174,8 @@ public class GisService {
 
 		for (StrandedPerson strandedPerson : strandedPersons) {
 			Feature spFeature = new Feature();
-			spFeature.setProperty("task", strandedPerson.getOwningTask());
-			spFeature.setProperty("id", strandedPerson.getId());
+			spFeature.setProperty("task",strandedPerson.getOwningTask());
+			spFeature.setProperty("id",strandedPerson.getId());
 
 			Point spPoint = new Point();
 			spPoint.setCoordinates(convertPointToPoint(strandedPerson.getLocation()).getCoordinates());
@@ -287,8 +290,9 @@ public class GisService {
 	}
 
 	public void completeTask(int taskId) {
-
+		
 		deploymentAreas.remove(taskId);
 	}
+
 
 }

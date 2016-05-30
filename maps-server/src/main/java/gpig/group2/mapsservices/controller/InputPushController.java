@@ -1,15 +1,9 @@
 package gpig.group2.mapsservices.controller;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import gpig.group2.mapsservices.service.GisService;
 import gpig.group2.model.sensor.OccupiedBuilding;
@@ -34,11 +28,9 @@ public class InputPushController {
 
 	@RequestMapping(value = "/strandedPerson", consumes = "application/xml", method = RequestMethod.POST)
 	@ResponseBody
-	public String pushStrandedPerson(HttpServletRequest req, @RequestBody StrandedPerson sp) {
+	public String pushStrandedPerson(@RequestBody StrandedPerson sp) {
 
-		String baseUrl = req.getProtocol().split("/")[0] + "://" + req.getRemoteHost() + ":" + req.getServerPort()
-				+ req.getContextPath() + "/";
-		gisService.addStrandedPerson(baseUrl, sp);
+		gisService.addStrandedPerson(sp);
 		return "Accepted";
 	}
 
@@ -51,21 +43,23 @@ public class InputPushController {
 
 	}
 
+
 	@RequestMapping(value = "/strandedPerson/{pid}/{tid}", consumes = "application/xml", method = RequestMethod.PUT)
 	@ResponseBody
 	public String pushStrandedPersonNewTask(@PathVariable Integer pid, @PathVariable Integer tid) {
 
-		gisService.setPersonTask(pid, tid);
+		gisService.setPersonTask(pid,tid);
 		return "Accepted";
 
 	}
+
+
 
 	@RequestMapping(value = "/buildingOccupancy", consumes = "application/xml", method = RequestMethod.POST)
 	@ResponseBody
 	public String pushStrandedPeron(@RequestBody BuildingOccupancyResponse bor) {
 
-		OccupiedBuilding ob = new OccupiedBuilding(bor.getOriginX(), bor.getEstimatedNumberOfPeopleX(),
-				new DateTime(bor.getTimestampX()));
+		OccupiedBuilding ob = new OccupiedBuilding(bor.getOriginX(), bor.getEstimatedNumberOfPeopleX(), new DateTime(bor.getTimestampX()));
 		gisService.addOccupiedBuilding(ob);
 		return "Accepted";
 	}
