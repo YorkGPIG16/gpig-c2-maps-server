@@ -45,6 +45,26 @@ public class InteropController {
 		return "Accepted";
 	}
 
+
+
+	@RequestMapping(value = "strandedPerson", produces = "application/json", method = RequestMethod.POST)
+	public String pushStrandedPersons(@RequestBody GeoJsonObject gjo) {
+
+		FeatureCollection fc;
+		if (gjo instanceof FeatureCollection) {
+			fc = (FeatureCollection) gjo;
+		} else {
+			return "Not a FeatureCollection";
+		}
+
+		gisService.setExternalSrandedPersons(fc);
+
+		return "Accepted";
+	}
+
+
+
+
 	@RequestMapping(produces = "application/xml", method = RequestMethod.GET)
 	@ResponseBody
 	public GPIGData getInteropData() {

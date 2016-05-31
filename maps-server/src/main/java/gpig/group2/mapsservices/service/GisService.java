@@ -42,6 +42,7 @@ public class GisService {
 	private FeatureCollection waterEdge;
 
 	private Integer lastStrandedPersonId = 0;
+	private FeatureCollection externalSrandedPersons;
 
 	public FeatureCollection getWaterEdge() {
 
@@ -155,6 +156,8 @@ public class GisService {
 				return getStrandedPersonsGeoJson();
 			case WATER_EDGE:
 				return getWaterEdge();
+			case STRANDED_PERSONS_EXTERNAL:
+				return this.externalSrandedPersons;
 			default:
 				return null;
 		}
@@ -308,4 +311,7 @@ public class GisService {
 		deploymentAreas.remove(taskId);
 	}
 
+	public void setExternalSrandedPersons(FeatureCollection externalSrandedPersons) {
+		this.externalSrandedPersons = externalSrandedPersons;
+	}
 }
