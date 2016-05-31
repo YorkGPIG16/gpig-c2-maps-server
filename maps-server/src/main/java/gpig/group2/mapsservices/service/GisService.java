@@ -42,7 +42,7 @@ public class GisService {
 	private FeatureCollection waterEdge;
 
 	private Integer lastStrandedPersonId = 0;
-	private FeatureCollection externalSrandedPersons;
+	private FeatureCollection externalSrandedPersons = new FeatureCollection();
 
 	public FeatureCollection getWaterEdge() {
 
