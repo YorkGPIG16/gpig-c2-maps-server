@@ -288,7 +288,7 @@ public class GisService {
 		} else {
 			drone = new Drone();
 			drones.put(droneId, drone);
-
+			drone.setPosition(dronePosition);
 			drone.setId(droneId);
 		}
 
