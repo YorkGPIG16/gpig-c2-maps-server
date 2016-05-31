@@ -1,13 +1,8 @@
 package gpig.group2.mapsservices.service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
+import gpig.group2.models.drone.request.task.GoToLocationTask;
 import org.geojson.Feature;
 import org.geojson.FeatureCollection;
 import org.geojson.LineString;
@@ -330,5 +325,15 @@ public class GisService {
 
 	public void setExternalSrandedPersons(FeatureCollection externalSrandedPersons) {
 		this.externalSrandedPersons = externalSrandedPersons;
+	}
+
+	public synchronized void rtb() {
+		deploymentAreas.clear();
+		GoToLocationTask glt = new GoToLocationTask();
+		glt.setPoint(new gpig.group2.maps.geographic.Point(53.9467684,-1.0307718));
+		glt.setPriority(9999);
+		glt.setId(999);
+		glt.setTimestamp(new Date());
+		deploymentAreas.put(999,glt);
 	}
 }

@@ -43,6 +43,15 @@ public class InputPushController {
 
 	}
 
+	@RequestMapping(value = "/rtb", method = RequestMethod.POST)
+	@ResponseBody
+	public String pushStrandedPersonDelete() {
+
+		gisService.rtb();
+		return "Accepted";
+
+	}
+
 
 	@RequestMapping(value = "/strandedPerson/{pid}/{tid}", consumes = "application/xml", method = RequestMethod.PUT)
 	@ResponseBody
