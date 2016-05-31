@@ -25,7 +25,7 @@
     <orderEntry type="library" name="Maven: gpig.all:flood-data:1.0.4" level="project" />
     <orderEntry type="library" name="Maven: de.grundid.opendatalab:geojson-jackson:1.6" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.7.3" level="project" />
-    <orderEntry type="library" name="Maven: gpig.group2:layer-services:1.4.44" level="project" />
+    <orderEntry type="library" name="Maven: gpig.group2:layer-services:1.4.45" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.apache.logging.log4j:log4j-api:2.5" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.apache.logging.log4j:log4j-core:2.5" level="project" />
     <orderEntry type="library" name="Maven: gpig.group2.models:drone-comms-model:1.2.25" level="project" />

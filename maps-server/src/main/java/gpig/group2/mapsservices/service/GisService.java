@@ -59,7 +59,8 @@ public class GisService {
 	}
 
 	public synchronized void addOccupiedBuilding(OccupiedBuilding ob) {
-
+		lastStrandedPersonId += 1;
+		ob.setId(lastStrandedPersonId);
 		occupiedBuildings.add(ob);
 	}
 
@@ -82,6 +83,17 @@ public class GisService {
 
 		if (found != null) {
 			strandedPersons.remove(found);
+		}
+
+		OccupiedBuilding fb = null;
+		for (OccupiedBuilding person : occupiedBuildings) {
+			if (person.getId() == id) {
+				fb = person;
+			}
+		}
+
+		if (fb != null) {
+			occupiedBuildings.remove(fb);
 		}
 
 	}
@@ -174,6 +186,10 @@ public class GisService {
 			spPoint.setCoordinates(convertPointToPoint(occupiedBuilding.getLocation()).getCoordinates());
 			spFeature.setGeometry(spPoint);
 
+
+			spFeature.setProperty("delete", "delete");
+			spFeature.setProperty("id", occupiedBuilding.getId());
+
 			spFeature.setProperty(ESTIMATED_OCCUPANCY, occupiedBuilding.getEstimatedOccupancy());
 			spFeature.setProperty(TIME_IDENTIFIED, occupiedBuilding.getTimeIdentified().toString());
 
@@ -191,6 +207,7 @@ public class GisService {
 			Feature spFeature = new Feature();
 			spFeature.setProperty("task", strandedPerson.getOwningTask());
 			spFeature.setProperty("id", strandedPerson.getId());
+			spFeature.setProperty("delete", "delete");
 
 			Point spPoint = new Point();
 			spPoint.setCoordinates(convertPointToPoint(strandedPerson.getLocation()).getCoordinates());

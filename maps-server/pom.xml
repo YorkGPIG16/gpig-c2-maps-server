@@ -65,7 +65,7 @@
 		<dependency>
 			<groupId>gpig.group2</groupId>
 			<artifactId>layer-services</artifactId>
-			<version>1.4.44</version>
+			<version>1.4.45</version>
 		</dependency>
 		<dependency>
 			<groupId>gpig.group2.models</groupId>
