@@ -1,5 +1,6 @@
 package gpig.group2.mapsservices.controller;
 
+import org.geojson.Feature;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -53,6 +54,28 @@ public class InputPushController {
 	}
 
 
+	@RequestMapping(value = "/responder", consumes = "application/json", method = RequestMethod.POST)
+	@ResponseBody
+	public String pushResponder(@RequestBody Feature feature) {
+
+		gisService.addResponder(feature);
+		return "Accepted";
+
+	}
+
+
+	@RequestMapping(value = "/responder/{pid}", method = RequestMethod.DELETE)
+	@ResponseBody
+	public String pushDeleteResponder(@PathVariable Integer pid) {
+
+		gisService.deleteResponder(pid);
+		return "Accepted";
+
+	}
+
+
+
+
 	@RequestMapping(value = "/strandedPerson/{pid}/{tid}", consumes = "application/xml", method = RequestMethod.PUT)
 	@ResponseBody
 	public String pushStrandedPersonNewTask(@PathVariable Integer pid, @PathVariable Integer tid) {
@@ -72,4 +95,6 @@ public class InputPushController {
 		gisService.addOccupiedBuilding(ob);
 		return "Accepted";
 	}
+
+
 }

@@ -6,7 +6,7 @@ import java.util.Map;
 public enum LayerId {
 	DRONE_LOCATION(1, "Drone locations"), STRANDED_PERSONS(2, "Stranded persons"), BUILDING_OCCUPANCY(3,
 			"Building occupancy"), WATER_EDGE(4, "Water's edge"),
-	STRANDED_PERSONS_EXTERNAL(5,"Interop Stranded Persons");
+	STRANDED_PERSONS_EXTERNAL(5,"Interop Stranded Persons"), RESPONDER(6,"Responder");
 
 	private int id;
 	private String name;

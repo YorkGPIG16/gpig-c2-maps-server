@@ -165,6 +165,8 @@ public class GisService {
 				return getWaterEdge();
 			case STRANDED_PERSONS_EXTERNAL:
 				return this.externalSrandedPersons;
+			case RESPONDER:
+				return this.responders;
 			default:
 				return null;
 		}
@@ -336,4 +338,26 @@ public class GisService {
 		glt.setTimestamp(new Date());
 		deploymentAreas.put(999,glt);
 	}
+
+	private FeatureCollection responders = new FeatureCollection();
+	private Integer responderCount = 1;
+	public void addResponder(Feature feature) {
+		feature.setProperty("responderid",responderCount++);
+		responders.add(feature);
+	}
+
+	public void deleteResponder(int id) {
+		Feature found = null;
+		for(Feature f : responders) {
+			if (f.<Integer>getProperty("responderid").equals(id)) {
+				found = f;
+				break;
+			}
+		}
+
+		if(found != null) {
+			responders.getFeatures().remove(found);
+		}
+	}
+
 }
