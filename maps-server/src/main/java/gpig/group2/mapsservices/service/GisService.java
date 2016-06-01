@@ -342,6 +342,7 @@ public class GisService {
 	private FeatureCollection responders = new FeatureCollection();
 	private Integer responderCount = 1;
 	public void addResponder(Feature feature) {
+		feature.setProperties(new HashMap<>());
 		feature.setProperty("responderid",responderCount++);
 		responders.add(feature);
 	}
